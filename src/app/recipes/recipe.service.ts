@@ -9,18 +9,20 @@ export class RecipeService {
 
   private recipes: Recipe[] = [
     new Recipe(
-      'A Test Recipe 1',
-      'This is simply a test',
-      'https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_1280.jpg',
+      'cote-de-boeuf',
+      'Côte de Boeuf',
+      'Une magnifique côté de boeuf',
+      'https://img.cuisineaz.com/660x660/2013-12-20/i2126-cote-de-boeuf-au-thym-et-au-romarin.jpeg',
       [
         new Ingredient('Meat', 1),
         new Ingredient('French Fries', 20)
       ]
     ),
     new Recipe(
-      'A Test Recipe 2',
-      'This is simply a test',
-      'https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_1280.jpg',
+      'burger',
+      'Burger',
+      'A wonderful burger',
+      'https://cdn.pixabay.com/photo/2020/11/08/01/44/burger-5722678_960_720.jpg',
       [
         new Ingredient('Buns', 2),
         new Ingredient('Meat', 2)
@@ -36,5 +38,9 @@ export class RecipeService {
 
   addIngredientsToShoppingList(ingredients: Ingredient[]): void {
     this.shoppingListService.addIngredients(ingredients);
+  }
+
+  getRecipe(index: number): Recipe {
+    return this.recipes[index];
   }
 }
