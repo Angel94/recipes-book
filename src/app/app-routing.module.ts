@@ -6,14 +6,15 @@ import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.com
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipesResolverService } from './recipes/recipes-resolver.service';
+import { RecipeGuard } from './recipe.guard';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
   { path: 'recipes', component: RecipesComponent, resolve: [RecipesResolverService], children: [
     { path: '', component: RecipeStartComponent },
     { path: 'new', component: RecipeEditComponent },
-    { path: ':id', component: RecipeDetailComponent },
-    { path: ':id/edit', component: RecipeEditComponent },
+    { path: ':id', component: RecipeDetailComponent, canActivate: [RecipeGuard] },
+    { path: ':id/edit', component: RecipeEditComponent, canActivate: [RecipeGuard] },
   ] },
   { path: 'shopping-list', component: ShoppingListComponent },
 ];
