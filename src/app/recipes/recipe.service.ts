@@ -9,32 +9,17 @@ export class RecipeService {
   recipesChanges = new Subject<Recipe[]>();
 
   private recipes: Recipe[] = [
-    new Recipe(
-      'cote-de-boeuf',
-      'Côte de Boeuf',
-      'Une magnifique côté de boeuf',
-      'https://img.cuisineaz.com/660x660/2013-12-20/i2126-cote-de-boeuf-au-thym-et-au-romarin.jpeg',
-      [
-        new Ingredient('Meat', 1),
-        new Ingredient('French Fries', 20)
-      ]
-    ),
-    new Recipe(
-      'burger',
-      'Burger',
-      'A wonderful burger',
-      'https://cdn.pixabay.com/photo/2020/11/08/01/44/burger-5722678_960_720.jpg',
-      [
-        new Ingredient('Buns', 2),
-        new Ingredient('Meat', 2)
-      ]
-    ),
   ];
 
   constructor(private shoppingListService: ShoppingListService) {}
 
   getRecipes(): Recipe[] {
     return this.recipes.slice();
+  }
+
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipesChanges.next(this.recipes.slice());
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]): void {
