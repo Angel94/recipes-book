@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   declarations: [AuthComponent],
   imports: [
     FormsModule,
-    RouterModule.forChild([{ path: 'auth', component: AuthComponent }]),
+    RouterModule.forChild([{ path: '', component: AuthComponent }]),
     SharedModule,
   ],
 })
