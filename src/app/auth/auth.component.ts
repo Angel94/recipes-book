@@ -20,6 +20,10 @@ export class AuthComponent {
     this.isLoginMode = !this.isLoginMode;
   }
 
+  onAlertClosed() {
+    this.signUpError = '';
+  }
+
   onSubmit(form: NgForm) {
     this.signUpError = '';
     if (!form.valid) {
