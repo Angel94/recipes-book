@@ -43,12 +43,10 @@ export class AuthComponent {
 
     authObs.subscribe(
       (responseData) => {
-        console.log(responseData);
         this.isPending = false;
         this.router.navigate(['/recipes']);
       },
       (error: string) => {
-        console.log(error);
         this.isPending = false;
         this.signUpError = error;
       }

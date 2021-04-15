@@ -2,7 +2,7 @@
   <div class="col-xs-8 col-xs-offset-2">
     <app-alert [message]="signUpError" *ngIf="signUpError" (closed)="onAlertClosed()"></app-alert>
 
-    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+    <form #authForm="ngForm" *ngIf="!isPending" (ngSubmit)="onSubmit(authForm)">
       <div class="form-group">
         <label for="email">E-mail</label>
         <input type="email" id="email" class="form-control" name="email" ngModel email required />
@@ -15,7 +15,10 @@
         <button class="btn btn-primary" type="submit" [disabled]="!authForm.valid">{{ isLoginMode ? 'Login' : 'Sign Up' }}</button> |
         <button class="btn btn-primary" type="button" (click)="onSwitchLoginMode()">Switch to {{ isLoginMode ? 'Sign Up' : 'Login' }}</button>
       </div>
-      <app-loading-spinner *ngIf="isPending"></app-loading-spinner>
     </form>
+
+    <div *ngIf="isPending" style="text-align: center;">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
   </div>
 </div>

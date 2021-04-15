@@ -112,6 +112,7 @@ export class AuthService {
     );
 
     if (!loadedUser.token) {
+      localStorage.removeItem('userData');
       return;
     }
 
