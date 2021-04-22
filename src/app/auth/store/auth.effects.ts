@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { of } from 'rxjs';
 
 import * as AuthActions from './auth.actions';
 import { environment } from '../../../environments/environment';
-import { of } from 'rxjs';
 import { Router } from '@angular/router';
-import { Action } from '@ngrx/store';
 import { User } from '../user.model';
 import { AuthService } from '../auth.service';
+import { Login } from './auth.actions';
 
 export interface AuthResponseData {
   kind: string;
@@ -30,7 +30,7 @@ const handleAuthentication = (
   const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
   const user = new User(email, userId, token, expirationDate);
   localStorage.setItem('user', JSON.stringify(user));
-  return new AuthActions.Login({ email, userId, token, expirationDate });
+  return new AuthActions.Login({ email, userId, token, expirationDate, redirect: true });
 };
 
 const handleError = (errorResponse) => {
@@ -159,6 +159,7 @@ export class AuthEffects {
           userId: userData.id,
           token: userData._token,
           expirationDate: new Date(userData._tokenExpirationDate),
+          redirect: false
         });
       })
     );
@@ -168,8 +169,10 @@ export class AuthEffects {
     () => {
       return this.actions$.pipe(
         ofType(AuthActions.LOGIN),
-        tap(() => {
-          this.router.navigate(['/']);
+        tap((authLogin: AuthActions.Login) => {
+          if (authLogin.payload.redirect) {
+            this.router.navigate(['/']);
+          }
         })
       );
     },

@@ -21,12 +21,12 @@ const routes: Routes = [
       {
         path: ':id',
         component: RecipeDetailComponent,
-        canActivate: [RecipeGuard],
+        // canActivate: [RecipeGuard],
       },
       {
         path: ':id/edit',
         component: RecipeEditComponent,
-        canActivate: [RecipeGuard],
+        // canActivate: [RecipeGuard],
       },
     ],
   },
