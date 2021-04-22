@@ -1,31 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
-import { AuthService, AuthResponseData } from './auth.service';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode = true;
   isPending = false;
   signUpError = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  private storeSub: Subscription;
 
-  onSwitchLoginMode() {
+  constructor(
+    private store: Store<fromApp.AppState>
+  ) {}
+
+  ngOnInit(): void {
+    this.storeSub = this.store.select('auth').subscribe((authState) => {
+      this.isPending = authState.loading;
+      this.signUpError = authState.authError;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+    }
+  }
+
+  onSwitchLoginMode(): void {
     this.isLoginMode = !this.isLoginMode;
   }
 
-  onAlertClosed() {
-    this.signUpError = '';
+  onAlertClosed(): void {
+    this.store.dispatch(new AuthActions.ClearError());
   }
 
-  onSubmit(form: NgForm) {
-    this.signUpError = '';
+  onSubmit(form: NgForm): void {
     if (!form.valid) {
       return;
     }
@@ -33,24 +50,12 @@ export class AuthComponent {
     this.isPending = true;
     const email = form.value.email;
     const password = form.value.password;
-    let authObs: Observable<AuthResponseData>;
 
     if (this.isLoginMode) {
-      authObs = this.authService.login(email, password);
+      this.store.dispatch(new AuthActions.LoginStart({ email, password }));
     } else {
-      authObs = this.authService.signupMethod(email, password);
+      this.store.dispatch(new AuthActions.SignupStart({ email, password }));
     }
-
-    authObs.subscribe(
-      (responseData) => {
-        this.isPending = false;
-        this.router.navigate(['/recipes']);
-      },
-      (error: string) => {
-        this.isPending = false;
-        this.signUpError = error;
-      }
-    );
 
     form.reset();
   }
