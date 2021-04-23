@@ -22,7 +22,7 @@ export class ShoppingListComponent implements OnInit {
     this.ingredients = this.store.select('shoppingList');
   }
 
-  onEditItem(index: number) {
+  onEditItem(index: number): void {
     this.store.dispatch(new ShoppingListActions.StartEdit(index));
   }
 }
